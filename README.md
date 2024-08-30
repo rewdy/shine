@@ -15,16 +15,20 @@ Usage: shine [options] <text>
 
   -e, --end-color string     The end color of the gradient (default "blue")
   -p, --pad                  Adds extra padding around the test to let it breathe (default true)
-  -r, --random               Selects random start and end colors
-  -s, --start-color string   The start color of the gradient (default "red")
+  -r, --random               Selects random start and end colors (default true)
+  -s, --start-color string   The start color of the gradient (default "pink")
+  -v, --version              Prints the version of the program
 
 Color swatches for you to choose from:
 
- red         yellow      gray        salmon      black
+ lime        navy        orange      persimmon   red
 
- white       persimmon   green       pink        teal
+ salmon      white       green       yellow      violet
 
- brown       orange      blue        indigo      violet
+ gold        gray        indigo      pink        purple
+
+ teal        blue        brown       forest      black
+
 ```
 
 ### Want to override default colors? Env vars FTW

@@ -11,6 +11,9 @@ import (
 )
 
 const (
+	// Version
+	version = "0.0.2"
+
 	// Env var to use for start color
 	startEnvVar = "SHINE_START_COLOR"
 
@@ -20,10 +23,10 @@ const (
 	envVarRandom = "SHINE_RANDOM"
 
 	// Default start color
-	startDefault = "pink"
+	masterDefaultStart = "pink"
 
 	// Default end color
-	endDefault = "blue"
+	masterDefaultEnd = "blue"
 )
 
 //
@@ -165,8 +168,8 @@ func main() {
 	}
 
 	// Figure out defaults
-	defaultStartColor := startDefault
-	defaultEndColor := endDefault
+	defaultStartColor := masterDefaultStart
+	defaultEndColor := masterDefaultEnd
 	defaultRandom := false
 	if os.Getenv(startEnvVar) != "" {
 		defaultStartColor = os.Getenv(startEnvVar)
@@ -183,6 +186,7 @@ func main() {
 	endColorFlag := pflag.StringP("end-color", "e", defaultEndColor, "The end color of the gradient")
 	padFlag := pflag.BoolP("pad", "p", true, "Adds extra padding around the test to let it breathe")
 	randomFlag := pflag.BoolP("random", "r", defaultRandom, "Selects random start and end colors")
+	versionFlag := pflag.BoolP("version", "v", false, "Prints the version of the program")
 
 	defaultText := "Hello, World!"
 	pflag.Usage = func() {
@@ -206,6 +210,9 @@ func main() {
 	if len(args) > 0 {
 		text = args[0]
 	}
+	if *versionFlag {
+		text = version
+	}
 
 	// Lowercase the colors so we don't have to worry about it
 	startColorCased := strings.ToLower(*startColorFlag)
@@ -216,6 +223,12 @@ func main() {
 	if *randomFlag {
 		startColorCased = acceptableColors[randomInt(0, len(acceptableColors))]
 		endColorCased = acceptableColors[randomInt(0, len(acceptableColors))]
+	}
+
+	// Use the built-in defaults always for version
+	if *versionFlag {
+		startColorCased = masterDefaultStart
+		endColorCased = masterDefaultEnd
 	}
 
 	// Get the start and end color rgb values
