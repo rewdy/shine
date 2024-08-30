@@ -10,6 +10,22 @@ import (
 	"github.com/spf13/pflag"
 )
 
+const (
+	// Env var to use for start color
+	startEnvVar = "SHINE_START_COLOR"
+
+	// Env var to use for end color
+	endEnvVar = "SHINE_END_COLOR"
+
+	envVarRandom = "SHINE_RANDOM"
+
+	// Default start color
+	startDefault = "pink"
+
+	// Default end color
+	endDefault = "blue"
+)
+
 //
 // HELPERS
 //
@@ -126,30 +142,47 @@ func generateGradient(text string, startColor, endColor [3]int) string {
 func main() {
 	// The colors we predefine
 	colors := map[string][3]int{
-		"red":       {255, 5, 32},
-		"orange":    {255, 165, 0},
-		"yellow":    {255, 255, 0},
-		"green":     {0, 128, 0},
-		"blue":      {20, 124, 234},
-		"indigo":    {75, 0, 130},
-		"violet":    {238, 130, 238},
-		"pink":      {255, 5, 234},
-		"teal":      {20, 124, 127},
-		"brown":     {139, 69, 19},
 		"black":     {0, 0, 0},
-		"white":     {255, 255, 255},
+		"blue":      {20, 124, 234},
+		"brown":     {139, 69, 19},
+		"forest":    {0, 97, 42},
+		"gold":      {255, 215, 0},
 		"gray":      {128, 128, 128},
-		"salmon":    {250, 128, 114},
+		"green":     {15, 158, 0},
+		"indigo":    {69, 0, 255},
+		"lime":      {59, 215, 0},
+		"navy":      {0, 0, 128},
+		"orange":    {255, 165, 0},
 		"persimmon": {236, 88, 0},
+		"pink":      {255, 5, 234},
+		"purple":    {128, 0, 128},
+		"red":       {255, 5, 32},
+		"salmon":    {250, 128, 114},
+		"teal":      {20, 124, 127},
+		"violet":    {108, 47, 157},
+		"white":     {255, 255, 255},
+		"yellow":    {255, 255, 0},
 	}
 
-	acceptableColors := getKeys(colors)
+	// Figure out defaults
+	defaultStartColor := startDefault
+	defaultEndColor := endDefault
+	defaultRandom := false
+	if os.Getenv(startEnvVar) != "" {
+		defaultStartColor = os.Getenv(startEnvVar)
+	}
+	if os.Getenv(endEnvVar) != "" {
+		defaultEndColor = os.Getenv(endEnvVar)
+	}
+	if os.Getenv(envVarRandom) != "" {
+		defaultRandom = true
+	}
 
 	// Setup flags
-	startColorFlag := pflag.StringP("start-color", "s", "red", "The start color of the gradient")
-	endColorFlag := pflag.StringP("end-color", "e", "blue", "The end color of the gradient")
+	startColorFlag := pflag.StringP("start-color", "s", defaultStartColor, "The start color of the gradient")
+	endColorFlag := pflag.StringP("end-color", "e", defaultEndColor, "The end color of the gradient")
 	padFlag := pflag.BoolP("pad", "p", true, "Adds extra padding around the test to let it breathe")
-	randomFlag := pflag.BoolP("random", "r", false, "Selects random start and end colors")
+	randomFlag := pflag.BoolP("random", "r", defaultRandom, "Selects random start and end colors")
 
 	defaultText := "Hello, World!"
 	pflag.Usage = func() {
@@ -164,6 +197,9 @@ func main() {
 
 	// Get the positional args, the text is positional
 	args := pflag.Args()
+
+	// Make a list of acceptable color names
+	acceptableColors := getKeys(colors)
 
 	// Use the first positional argument as the text input if provided
 	text := defaultText

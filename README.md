@@ -27,4 +27,37 @@ Color swatches for you to choose from:
  brown       orange      blue        indigo      violet
 ```
 
-...in progress... 🤓
+### Want to override default colors? Env vars FTW
+
+If you don't like pink-to-blue gradients, try this:
+
+```bash
+export SHINE_START_COLOR=teal
+export SHINE_END_COLOR=violet
+
+# live your life....
+
+shine "shine bright like a ♦"
+
+# voila!
+```
+
+### That's... so... 🤭 rAnDOm!
+
+If you want `shine` to always use random colors, try this:
+
+```bash
+export SHINE_RANDOM=yasss  # set to anything. enabled by being set.
+
+# and again
+
+shine "wow, hi, yes"
+
+# voila!
+```
+
+If goes without saying, you could add the above env vars to your `.zshrc` (or comparable) and enjoy persistent defaults!
+
+---
+
+😂 Made with joy by [rewdy](https://rewdy.lol) xoxo
