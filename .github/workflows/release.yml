@@ -25,7 +25,7 @@ jobs:
 
       - name: Build binary
         run: |
-          mkdir -p build
+          mkdir -p dist
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o dist/shine-${{ matrix.goos }}-${{ matrix.goarch }} ./cmd/shine
 
       - name: Upload Release Asset
