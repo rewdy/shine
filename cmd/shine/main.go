@@ -5,11 +5,17 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/spf13/pflag"
 )
 
-func GetKeys(m map[string][3]int) []string {
+//
+// HELPERS
+//
+
+// helper function to get all keys from a color map
+func getKeys(m map[string][3]int) []string {
 	keys := make([]string, 0, len(m))
 	for key := range m {
 		keys = append(keys, key)
@@ -17,15 +23,17 @@ func GetKeys(m map[string][3]int) []string {
 	return keys
 }
 
+// helper function to get a random integer between min and max
 func randomInt(min, max int) int {
 	return min + rand.Intn(max-min)
 }
 
-// spaces returns a string of n spaces
+// helper function to return n number of spaces
 func spaces(n int) string {
 	return fmt.Sprintf("%*s", n, " ")
 }
 
+// helper function to print the color options for the --help command
 func printColorsOptions(colors map[string][3]int) {
 	var colorStrings = make([][2]string, len(colors))
 	maxLength := 0
@@ -70,9 +78,35 @@ func printColorsOptions(colors map[string][3]int) {
 	}
 }
 
+// Function to split string into characters, respecting unicode
+// so we can keep emojis!!!! xoxo 💋
+func splitByRunes(s string) []string {
+	var result []string
+	for len(s) > 0 {
+		r, size := utf8.DecodeRuneInString(s)
+		result = append(result, string(r))
+		s = s[size:]
+	}
+	return result
+}
+
+// Helper to returns a string with spaced added around it or not
+func padOrNot(text string, pad bool) string {
+	if pad {
+		return " " + text + " "
+	}
+	return text
+}
+
+//
+// REAL STUFF
+//
+
+// The main gradient function
 func generateGradient(text string, startColor, endColor [3]int) string {
 	// calculate the color of the steps based on length of text
-	steps := len(text)
+	chars := splitByRunes(text)
+	steps := len(chars)
 	gradientText := ""
 
 	for i := 0; i < steps; i++ {
@@ -82,20 +116,15 @@ func generateGradient(text string, startColor, endColor [3]int) string {
 		b := startColor[2] + (endColor[2]-startColor[2])*i/(steps-1)
 
 		// Append the current character with the background color and reset the text color
-		gradientText += fmt.Sprintf("\033[48;2;%d;%d;%dm%c\033[0m", r, g, b, text[i])
+		gradientText += fmt.Sprintf("\033[48;2;%d;%d;%dm%v\033[0m", r, g, b, chars[i])
 	}
 
 	return gradientText
 }
 
-func padOrNot(text string, pad bool) string {
-	if pad {
-		return " " + text + " "
-	}
-	return text
-}
-
+// Main function
 func main() {
+	// The colors we predefine
 	colors := map[string][3]int{
 		"red":       {255, 5, 32},
 		"orange":    {255, 165, 0},
@@ -114,8 +143,9 @@ func main() {
 		"persimmon": {236, 88, 0},
 	}
 
-	acceptableColors := GetKeys(colors)
+	acceptableColors := getKeys(colors)
 
+	// Setup flags
 	startColorFlag := pflag.StringP("start-color", "s", "red", "The start color of the gradient")
 	endColorFlag := pflag.StringP("end-color", "e", "blue", "The end color of the gradient")
 	padFlag := pflag.BoolP("pad", "p", true, "Adds extra padding around the test to let it breathe")
@@ -129,14 +159,11 @@ func main() {
 		printColorsOptions(colors)
 	}
 
-	// Parse the flags
+	// Parse the flags (Note: you can't access flags before this call)
 	pflag.Parse()
 
-	// Get the positional args
+	// Get the positional args, the text is positional
 	args := pflag.Args()
-
-	startColorCased := strings.ToLower(*startColorFlag)
-	endColorCased := strings.ToLower(*endColorFlag)
 
 	// Use the first positional argument as the text input if provided
 	text := defaultText
@@ -144,12 +171,18 @@ func main() {
 		text = args[0]
 	}
 
+	// Lowercase the colors so we don't have to worry about it
+	startColorCased := strings.ToLower(*startColorFlag)
+	endColorCased := strings.ToLower(*endColorFlag)
+
+	// If the random flag is set, pick random colors. This overrides
+	// the values passed in start and end colors/default colors
 	if *randomFlag {
 		startColorCased = acceptableColors[randomInt(0, len(acceptableColors))]
 		endColorCased = acceptableColors[randomInt(0, len(acceptableColors))]
 	}
 
-	// Get the start and end colors
+	// Get the start and end color rgb values
 	startColor := colors[startColorCased]
 	endColor := colors[endColorCased]
 

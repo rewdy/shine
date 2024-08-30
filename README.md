@@ -20,11 +20,11 @@ Usage: shine [options] <text>
 
 Color swatches for you to choose from:
 
- red            yellow         gray           salmon         black
+ red         yellow      gray        salmon      black
 
- white          persimmon      green          pink           teal
+ white       persimmon   green       pink        teal
 
- brown          orange         blue           indigo         violet
+ brown       orange      blue        indigo      violet
 ```
 
 ...in progress... 🤓
