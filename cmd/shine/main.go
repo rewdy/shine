@@ -12,7 +12,7 @@ import (
 
 const (
 	// Version
-	version = "0.0.6"
+	version = "0.0.7"
 
 	// Env var to use for start color
 	startEnvVar = "SHINE_START_COLOR"
