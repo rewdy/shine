@@ -1,6 +1,6 @@
-# SHINE
+# ✨ SHINE
 
-`shine` is a ridiculous command line tool to render a string of text with a gradient-like background.
+`shine` is a ridiculous command line utility for displaying text with a gradient background.
 
 ## Install
 
@@ -8,7 +8,7 @@ If you're **already using go**, then just run `go install github.com/rewdy/shine
 
 ## Usage
 
-[![asciicast](https://asciinema.org/a/JsmY7s4qNTRM2jCGAeefREj7e.svg)](https://asciinema.org/a/JsmY7s4qNTRM2jCGAeefREj7e)
+[![asciicast](https://asciinema.org/a/JsmY7s4qNTRM2jCGAeefREj7e.png)](https://asciinema.org/a/JsmY7s4qNTRM2jCGAeefREj7e)
 
 ```bash
 Usage: shine [options] <text>
