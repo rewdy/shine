@@ -1,4 +1,3 @@
-# NOT CURRENTLY USING THIS FILE
 project_name: shine
 builds:
   - main: ./cmd/shine

@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
     "pflag"
-  ]
+  ],
+  "makefile.configureOnOpen": false
 }
