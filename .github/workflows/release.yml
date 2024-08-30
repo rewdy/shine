@@ -9,6 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,11 +25,12 @@ jobs:
 
       - name: Build binary
         run: |
-          mkdir -p dist
-          make build-releases
+          mkdir -p build
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o dist/shine-${{ matrix.goos }}-${{ matrix.goarch }} ./cmd/shine
 
       - name: Upload Release Asset
-        uses: actions/upload-artifact@v2
+        uses: softprops/action-gh-release@v1
         with:
-          name: shine-binaries
-          path: dist/
+          files: dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
