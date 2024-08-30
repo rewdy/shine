@@ -2,6 +2,12 @@
 
 `shine` is a ridiculous command line tool to render a string of text with a gradient-like background.
 
+## Install
+
+If you're **already using go**, then just run `go install github.com/rewdy/shine/cmd/shine@latest`
+
+## Usage
+
 ```bash
 Usage: shine [options] <text>
   -e, --end-color string     The end color of the gradient. Can be: black, yellow, violet, teal, brown, salmon, blue, pink, white, gray, green, indigo, persimmon, red, orange. (default "blue")
